@@ -103,6 +103,10 @@ struct Config {
   // amount of time to wait after the last request is made on a connection
   ev_tstamp conn_inactivity_timeout;
   enum { PROTO_HTTP2, PROTO_HTTP1_1 } no_tls_proto;
+  // 2021, April
+  // Updated by Simonas Mulevicius, sm2354@cam.ac.uk
+  // noencryption is true if developers do not want to encrypt payload and headers
+  bool noencryption;
   uint32_t header_table_size;
   uint32_t encoder_header_table_size;
   // file descriptor for upload data

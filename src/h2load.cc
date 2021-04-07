@@ -2095,6 +2095,10 @@ Options:
       << NGHTTP2_CLEARTEXT_PROTO_VERSION_ID << R"( and )" << NGHTTP2_H1_1 << R"(
               Default: )"
       << NGHTTP2_CLEARTEXT_PROTO_VERSION_ID << R"(
+  -P, --plaintext-encryption
+            Plaintext mode (Null encryption). 
+            Only to be used in development!
+            Both client and server have to set this flag.
   -d, --data=<PATH>
               Post FILE to  server.  The request method  is changed to
               POST.   For  http/1.1 connection,  if  -d  is used,  the
@@ -2261,6 +2265,7 @@ int main(int argc, char **argv) {
         {"input-file", required_argument, nullptr, 'i'},
         {"header", required_argument, nullptr, 'H'},
         {"no-tls-proto", required_argument, nullptr, 'p'},
+        {"plaintext-encryption", no_argument, nullptr, 'P'},
         {"verbose", no_argument, nullptr, 'v'},
         {"help", no_argument, nullptr, 'h'},
         {"version", no_argument, &flag, 1},
@@ -2287,7 +2292,7 @@ int main(int argc, char **argv) {
         {nullptr, 0, nullptr, 0}};
     int option_index = 0;
     auto c = getopt_long(argc, argv,
-                         "hvW:c:d:m:n:p:t:w:H:i:r:T:N:D:B:", long_options,
+                         "hvW:c:d:m:n:p:Pt:w:H:i:r:T:N:D:B:", long_options,
                          &option_index);
     if (c == -1) {
       break;
@@ -2375,6 +2380,14 @@ int main(int argc, char **argv) {
       }
       break;
     }
+
+    // 2021, April
+    // Updated by Simonas Mulevicius, sm2354@cam.ac.uk  
+    case 'P':
+      // Null encryption (Plaintext mode)
+      config.noencryption = true;
+      break;
+      
     case 'r':
       config.rate = strtoul(optarg, nullptr, 10);
       if (config.rate == 0) {

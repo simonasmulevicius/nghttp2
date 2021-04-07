@@ -302,6 +302,7 @@ int Client::quic_init(const sockaddr *local_addr, socklen_t local_addrlen,
     return -1;
   }
 
+  printf("Using encryption");
   auto callbacks = ngtcp2_callbacks{
       ngtcp2_crypto_client_initial_cb,
       nullptr, // recv_client_initial
@@ -337,11 +338,51 @@ int Client::quic_init(const sockaddr *local_addr, socklen_t local_addrlen,
       ngtcp2_crypto_delete_crypto_cipher_ctx_cb,
   };
 
+
+
   ngtcp2_cid scid, dcid;
   generate_cid(scid);
   generate_cid(dcid);
 
   auto config = worker->config;
+
+  if (config->noencryption){
+    printf("WARNING! Using Null-encryption");
+    auto callbacks = ngtcp2_callbacks{
+      ngtcp2_crypto_client_initial_cb,
+      nullptr, // recv_client_initial
+      ngtcp2_crypto_recv_crypto_data_cb,
+      h2load::handshake_completed,
+      nullptr, // recv_version_negotiation
+      ngtcp2_crypto_encrypt_unsecure_cb,
+      ngtcp2_crypto_decrypt_unsecure_cb,
+      ngtcp2_crypto_hp_mask_unsecure_cb,
+      h2load::recv_stream_data,
+      nullptr, // acked_crypto_offset
+      h2load::acked_stream_data_offset,
+      nullptr, // stream_open
+      h2load::stream_close,
+      nullptr, // recv_stateless_reset
+      ngtcp2_crypto_recv_retry_cb,
+      h2load::extend_max_local_streams_bidi,
+      nullptr, // extend_max_local_streams_uni
+      nullptr, // rand
+      get_new_connection_id,
+      nullptr, // remove_connection_id
+      ngtcp2_crypto_update_key_cb,
+      nullptr, // path_validation
+      select_preferred_addr,
+      h2load::stream_reset,
+      nullptr, // extend_max_remote_streams_bidi
+      nullptr, // extend_max_remote_streams_uni
+      nullptr, // extend_max_stream_data
+      nullptr, // dcid_status
+      nullptr, // handshake_confirmed
+      nullptr, // recv_new_token
+      ngtcp2_crypto_delete_crypto_aead_ctx_cb,
+      ngtcp2_crypto_delete_crypto_cipher_ctx_cb,
+    };
+  }
 
   ngtcp2_settings settings;
   ngtcp2_settings_default(&settings);
