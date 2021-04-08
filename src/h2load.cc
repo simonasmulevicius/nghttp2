@@ -2385,6 +2385,7 @@ int main(int argc, char **argv) {
     // Updated by Simonas Mulevicius, sm2354@cam.ac.uk  
     case 'P':
       // Null encryption (Plaintext mode)
+      printf("Setting null encryption\n");
       config.noencryption = true;
       break;
       

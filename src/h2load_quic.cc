@@ -302,7 +302,6 @@ int Client::quic_init(const sockaddr *local_addr, socklen_t local_addrlen,
     return -1;
   }
 
-  printf("Using encryption");
   auto callbacks = ngtcp2_callbacks{
       ngtcp2_crypto_client_initial_cb,
       nullptr, // recv_client_initial
@@ -338,8 +337,6 @@ int Client::quic_init(const sockaddr *local_addr, socklen_t local_addrlen,
       ngtcp2_crypto_delete_crypto_cipher_ctx_cb,
   };
 
-
-
   ngtcp2_cid scid, dcid;
   generate_cid(scid);
   generate_cid(dcid);
@@ -347,8 +344,8 @@ int Client::quic_init(const sockaddr *local_addr, socklen_t local_addrlen,
   auto config = worker->config;
 
   if (config->noencryption){
-    printf("WARNING! Using Null-encryption");
-    auto callbacks = ngtcp2_callbacks{
+    printf("[WARNING! Using Null-encryption]\n");
+    callbacks = ngtcp2_callbacks{
       ngtcp2_crypto_client_initial_cb,
       nullptr, // recv_client_initial
       ngtcp2_crypto_recv_crypto_data_cb,
