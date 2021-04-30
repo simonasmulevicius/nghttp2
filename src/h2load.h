@@ -104,7 +104,7 @@ struct Config {
   ev_tstamp conn_inactivity_timeout;
   enum { PROTO_HTTP2, PROTO_HTTP1_1 } no_tls_proto;
   // 2021, April
-  // Updated by Simonas Mulevicius, sm2354@cam.ac.uk
+  // Updated by Candidate Number:2439D
   // noencryption is true if developers do not want to encrypt payload and headers
   bool noencryption;
   uint32_t header_table_size;

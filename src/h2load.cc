@@ -2382,7 +2382,7 @@ int main(int argc, char **argv) {
     }
 
     // 2021, April
-    // Updated by Simonas Mulevicius, sm2354@cam.ac.uk  
+    // Updated by Candidate Number:2439D 
     case 'P':
       // Null encryption (Plaintext mode)
       printf("Setting null encryption\n");
