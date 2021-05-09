@@ -2,6 +2,9 @@
 
 TIMEOUT=10
 
+# 2021, April
+# Added by Candidate Number:2439D
+
 ## PREREQUISITES:
 # ${NGTCP2_FOLDER}/examples/server.key 
 # ${NGTCP2_FOLDER}/examples/server.cert
